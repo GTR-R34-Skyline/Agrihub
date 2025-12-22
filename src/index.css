@@ -6,114 +6,200 @@
 
 @layer base {
   :root {
-    /* Agricultural Green Palette */
-    --background: 45 30% 98%;
-    --foreground: 150 25% 15%;
+    /* ========================================
+       INDIAN SOIL-THEMED DESIGN SYSTEM
+       ======================================== */
+    
+    /* Base Colors - Alluvial Soil Theme (Light, Fertile, Wheat Tones) */
+    --background: 40 35% 97%;
+    --foreground: 25 30% 15%;
 
-    --card: 45 25% 96%;
-    --card-foreground: 150 25% 15%;
+    --card: 40 30% 95%;
+    --card-foreground: 25 30% 15%;
 
-    --popover: 45 30% 98%;
-    --popover-foreground: 150 25% 15%;
+    --popover: 40 35% 97%;
+    --popover-foreground: 25 30% 15%;
 
     /* Primary: Rich Forest Green */
-    --primary: 142 45% 28%;
-    --primary-foreground: 45 30% 98%;
+    --primary: 142 50% 32%;
+    --primary-foreground: 40 35% 97%;
 
-    /* Secondary: Warm Earth/Amber */
-    --secondary: 35 65% 50%;
-    --secondary-foreground: 45 30% 98%;
+    /* Secondary: Warm Earth/Terracotta */
+    --secondary: 25 55% 50%;
+    --secondary-foreground: 40 35% 97%;
 
-    --muted: 45 20% 92%;
-    --muted-foreground: 150 15% 40%;
+    --muted: 35 25% 90%;
+    --muted-foreground: 25 20% 45%;
 
     /* Accent: Fresh Leaf Green */
-    --accent: 142 50% 45%;
-    --accent-foreground: 45 30% 98%;
+    --accent: 145 55% 40%;
+    --accent-foreground: 40 35% 97%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 15% 88%;
-    --input: 45 15% 88%;
-    --ring: 142 45% 28%;
+    --border: 35 20% 85%;
+    --input: 35 20% 85%;
+    --ring: 142 50% 32%;
 
     --radius: 0.75rem;
 
-    /* Custom Agrihub Colors */
-    --success: 142 70% 45%;
+    /* ========================================
+       SOIL TYPE COLOR PALETTES
+       ======================================== */
+    
+    /* Alluvial Soil - Home & Marketplace (Light brown, wheat, fertile) */
+    --alluvial-bg: 40 35% 97%;
+    --alluvial-surface: 40 30% 93%;
+    --alluvial-accent: 42 60% 50%;
+    --alluvial-text: 25 30% 15%;
+    
+    /* Black Soil (Regur) - Analytics & Pricing (Dark, rich) */
+    --black-soil-bg: 220 15% 12%;
+    --black-soil-surface: 220 12% 18%;
+    --black-soil-accent: 45 80% 55%;
+    --black-soil-text: 40 20% 95%;
+    
+    /* Red Soil - Advisory & Insights (Terracotta, iron-rich) */
+    --red-soil-bg: 15 40% 94%;
+    --red-soil-surface: 15 35% 88%;
+    --red-soil-accent: 15 65% 45%;
+    --red-soil-text: 15 45% 15%;
+    
+    /* Laterite Soil - Farmer Dashboard (Earthy orange) */
+    --laterite-bg: 25 45% 95%;
+    --laterite-surface: 25 40% 90%;
+    --laterite-accent: 25 70% 48%;
+    --laterite-text: 25 40% 12%;
+    
+    /* Mountain/Forest Soil - Sustainability & About (Deep green) */
+    --forest-bg: 150 25% 96%;
+    --forest-surface: 150 20% 92%;
+    --forest-accent: 150 50% 30%;
+    --forest-text: 150 30% 10%;
+
+    /* ========================================
+       STATUS & UTILITY COLORS
+       ======================================== */
+    --success: 142 70% 40%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
+    
+    /* ========================================
+       GRADIENTS
+       ======================================== */
+    --gradient-hero: linear-gradient(135deg, hsl(142 50% 32%) 0%, hsl(145 55% 38%) 40%, hsl(42 60% 50%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 55% 50%) 0%, hsl(42 60% 50%) 100%);
+    --gradient-earth: linear-gradient(180deg, hsl(40 35% 97%) 0%, hsl(35 25% 90%) 100%);
+    --gradient-forest: linear-gradient(135deg, hsl(150 50% 30%) 0%, hsl(142 50% 32%) 100%);
+    --gradient-sunset: linear-gradient(135deg, hsl(25 55% 50%) 0%, hsl(15 65% 45%) 50%, hsl(5 60% 40%) 100%);
+    --gradient-alluvial: linear-gradient(180deg, hsl(40 35% 97%) 0%, hsl(42 40% 88%) 100%);
+    --gradient-overlay: linear-gradient(180deg, transparent 0%, hsl(25 30% 15% / 0.8) 100%);
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(142 45% 28%) 0%, hsl(142 50% 35%) 50%, hsl(35 65% 50%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(45 30% 98%) 0%, hsl(45 25% 94%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(142 50% 45%) 0%, hsl(142 45% 28%) 100%);
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(150 25% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(150 25% 15% / 0.1), 0 2px 4px -2px hsl(150 25% 15% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(150 25% 15% / 0.1), 0 4px 6px -4px hsl(150 25% 15% / 0.1);
-    --shadow-glow: 0 0 40px hsl(142 45% 28% / 0.2);
+    /* ========================================
+       SHADOWS (Earthy, Natural Depth)
+       ======================================== */
+    --shadow-sm: 0 1px 2px 0 hsl(25 30% 15% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(25 30% 15% / 0.1), 0 2px 4px -2px hsl(25 30% 15% / 0.08);
+    --shadow-lg: 0 10px 25px -5px hsl(25 30% 15% / 0.12), 0 8px 10px -6px hsl(25 30% 15% / 0.08);
+    --shadow-xl: 0 20px 40px -12px hsl(25 30% 15% / 0.15);
+    --shadow-glow: 0 0 40px hsl(142 50% 32% / 0.25);
+    --shadow-warm: 0 8px 30px hsl(25 55% 50% / 0.2);
 
     /* Sidebar */
-    --sidebar-background: 45 25% 96%;
-    --sidebar-foreground: 150 25% 15%;
-    --sidebar-primary: 142 45% 28%;
-    --sidebar-primary-foreground: 45 30% 98%;
-    --sidebar-accent: 142 50% 45%;
-    --sidebar-accent-foreground: 45 30% 98%;
-    --sidebar-border: 45 15% 88%;
-    --sidebar-ring: 142 45% 28%;
+    --sidebar-background: 40 30% 95%;
+    --sidebar-foreground: 25 30% 15%;
+    --sidebar-primary: 142 50% 32%;
+    --sidebar-primary-foreground: 40 35% 97%;
+    --sidebar-accent: 145 55% 40%;
+    --sidebar-accent-foreground: 40 35% 97%;
+    --sidebar-border: 35 20% 85%;
+    --sidebar-ring: 142 50% 32%;
   }
 
   .dark {
-    --background: 150 20% 8%;
-    --foreground: 45 25% 95%;
+    --background: 25 20% 8%;
+    --foreground: 40 25% 95%;
 
-    --card: 150 18% 12%;
-    --card-foreground: 45 25% 95%;
+    --card: 25 18% 12%;
+    --card-foreground: 40 25% 95%;
 
-    --popover: 150 18% 12%;
-    --popover-foreground: 45 25% 95%;
+    --popover: 25 18% 12%;
+    --popover-foreground: 40 25% 95%;
 
-    --primary: 142 50% 45%;
-    --primary-foreground: 150 20% 8%;
+    --primary: 145 55% 45%;
+    --primary-foreground: 25 20% 8%;
 
-    --secondary: 35 55% 45%;
-    --secondary-foreground: 150 20% 8%;
+    --secondary: 25 50% 45%;
+    --secondary-foreground: 25 20% 8%;
 
-    --muted: 150 15% 18%;
-    --muted-foreground: 45 15% 65%;
+    --muted: 25 15% 18%;
+    --muted-foreground: 40 15% 65%;
 
-    --accent: 142 45% 35%;
-    --accent-foreground: 45 25% 95%;
+    --accent: 145 50% 38%;
+    --accent-foreground: 40 25% 95%;
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 15% 20%;
-    --input: 150 15% 20%;
-    --ring: 142 50% 45%;
+    --border: 25 15% 22%;
+    --input: 25 15% 22%;
+    --ring: 145 55% 45%;
 
-    --success: 142 60% 40%;
-    --warning: 38 80% 45%;
-    --info: 199 70% 45%;
+    --success: 142 60% 42%;
+    --warning: 38 80% 48%;
+    --info: 199 70% 48%;
 
-    --gradient-hero: linear-gradient(135deg, hsl(150 20% 8%) 0%, hsl(142 45% 15%) 50%, hsl(35 55% 25%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(150 18% 12%) 0%, hsl(150 15% 10%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 20% 8%) 0%, hsl(142 45% 18%) 50%, hsl(25 50% 30%) 100%);
+    --gradient-earth: linear-gradient(180deg, hsl(25 18% 12%) 0%, hsl(25 15% 10%) 100%);
 
-    --sidebar-background: 150 18% 10%;
-    --sidebar-foreground: 45 25% 95%;
-    --sidebar-primary: 142 50% 45%;
-    --sidebar-primary-foreground: 150 20% 8%;
-    --sidebar-accent: 142 45% 35%;
-    --sidebar-accent-foreground: 45 25% 95%;
-    --sidebar-border: 150 15% 20%;
-    --sidebar-ring: 142 50% 45%;
+    --sidebar-background: 25 18% 10%;
+    --sidebar-foreground: 40 25% 95%;
+    --sidebar-primary: 145 55% 45%;
+    --sidebar-primary-foreground: 25 20% 8%;
+    --sidebar-accent: 145 50% 38%;
+    --sidebar-accent-foreground: 40 25% 95%;
+    --sidebar-border: 25 15% 22%;
+    --sidebar-ring: 145 55% 45%;
+  }
+
+  /* Soil Theme Classes */
+  .theme-alluvial {
+    --background: var(--alluvial-bg);
+    --card: var(--alluvial-surface);
+    --foreground: var(--alluvial-text);
+    --accent: var(--alluvial-accent);
+  }
+
+  .theme-black-soil {
+    --background: var(--black-soil-bg);
+    --card: var(--black-soil-surface);
+    --foreground: var(--black-soil-text);
+    --accent: var(--black-soil-accent);
+  }
+
+  .theme-red-soil {
+    --background: var(--red-soil-bg);
+    --card: var(--red-soil-surface);
+    --foreground: var(--red-soil-text);
+    --accent: var(--red-soil-accent);
+  }
+
+  .theme-laterite {
+    --background: var(--laterite-bg);
+    --card: var(--laterite-surface);
+    --foreground: var(--laterite-text);
+    --accent: var(--laterite-accent);
+  }
+
+  .theme-forest {
+    --background: var(--forest-bg);
+    --card: var(--forest-surface);
+    --foreground: var(--forest-text);
+    --accent: var(--forest-accent);
   }
 }
 
@@ -147,21 +233,66 @@
 
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: var(--gradient-accent);
+    background-image: var(--gradient-hero);
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-warm);
   }
 
   .bg-hero-gradient {
     background-image: var(--gradient-hero);
   }
 
-  .bg-card-gradient {
-    background-image: var(--gradient-card);
+  .bg-earth-gradient {
+    background-image: var(--gradient-earth);
+  }
+
+  .bg-warm-gradient {
+    background-image: var(--gradient-warm);
+  }
+
+  .bg-forest-gradient {
+    background-image: var(--gradient-forest);
+  }
+
+  .bg-alluvial-gradient {
+    background-image: var(--gradient-alluvial);
+  }
+
+  .bg-overlay-gradient {
+    background-image: var(--gradient-overlay);
   }
 
   .shadow-glow {
     box-shadow: var(--shadow-glow);
   }
 
+  .shadow-warm {
+    box-shadow: var(--shadow-warm);
+  }
+
+  /* Glass Effects */
+  .glass {
+    @apply backdrop-blur-xl bg-background/60 border border-border/50;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-lg bg-card/80 border border-border/30 shadow-lg;
+  }
+
+  /* Soil Pattern Backgrounds */
+  .pattern-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  .pattern-dots {
+    background-image: radial-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -181,57 +312,61 @@
   .animate-slide-in-right {
     animation: slideInRight 0.5s ease-out forwards;
   }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(90deg, transparent, hsl(var(--muted) / 0.5), transparent);
+    background-size: 200% 100%;
+  }
 }
 
+/* Keyframes */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 /* Stagger animation delays */
@@ -240,3 +375,26 @@
 .stagger-3 { animation-delay: 0.3s; }
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
