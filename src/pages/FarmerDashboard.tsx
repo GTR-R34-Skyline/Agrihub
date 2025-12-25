@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
@@ -14,7 +14,10 @@ import {
   Clock,
   CheckCircle,
   Truck,
-  X
+  X,
+  Upload,
+  Image as ImageIcon,
+  Loader2
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -44,6 +47,10 @@ const FarmerDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [productForm, setProductForm] = useState({
     name: "",
@@ -128,6 +135,52 @@ const FarmerDashboard = () => {
     };
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be less than 5MB");
+      return;
+    }
+
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const uploadImage = async (productId: string): Promise<string | null> => {
+    if (!imageFile || !user) return null;
+
+    setIsUploadingImage(true);
+    try {
+      const fileExt = imageFile.name.split(".").pop();
+      const fileName = `${user.id}/${productId}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("product-images")
+        .upload(fileName, imageFile, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("product-images")
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    } catch (error: any) {
+      console.error("Image upload error:", error);
+      toast.error("Failed to upload image");
+      return null;
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const handleAddProduct = async () => {
     if (!user) return;
     if (!productForm.name || !productForm.price || !productForm.quantity_available) {
@@ -136,7 +189,7 @@ const FarmerDashboard = () => {
     }
 
     try {
-      const { error } = await supabase.from('products').insert({
+      const { data: newProduct, error } = await supabase.from('products').insert({
         seller_id: user.id,
         name: productForm.name,
         description: productForm.description || null,
@@ -145,9 +198,16 @@ const FarmerDashboard = () => {
         quantity_available: parseInt(productForm.quantity_available),
         location: productForm.location || null,
         is_organic: productForm.is_organic,
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      if (imageFile && newProduct) {
+        const imageUrl = await uploadImage(newProduct.id);
+        if (imageUrl) {
+          await supabase.from('products').update({ image_url: imageUrl }).eq('id', newProduct.id);
+        }
+      }
 
       toast.success("Product added successfully!");
       setShowAddProduct(false);
@@ -162,6 +222,16 @@ const FarmerDashboard = () => {
     if (!editingProduct) return;
 
     try {
+      let imageUrl = editingProduct.image_url;
+
+      // Upload new image if selected
+      if (imageFile) {
+        const newImageUrl = await uploadImage(editingProduct.id);
+        if (newImageUrl) {
+          imageUrl = newImageUrl;
+        }
+      }
+
       const { error } = await supabase
         .from('products')
         .update({
@@ -172,6 +242,7 @@ const FarmerDashboard = () => {
           quantity_available: parseInt(productForm.quantity_available),
           location: productForm.location || null,
           is_organic: productForm.is_organic,
+          image_url: imageUrl,
         })
         .eq('id', editingProduct.id);
 
@@ -209,6 +280,11 @@ const FarmerDashboard = () => {
       location: "",
       is_organic: false,
     });
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const startEdit = (product: Product) => {
@@ -221,6 +297,8 @@ const FarmerDashboard = () => {
       location: product.location || "",
       is_organic: product.is_organic || false,
     });
+    setImagePreview(product.image_url || null);
+    setImageFile(null);
     setEditingProduct(product);
   };
 
@@ -344,8 +422,62 @@ const FarmerDashboard = () => {
                     />
                     <Label>Organic Certified</Label>
                   </div>
-                  <Button className="w-full" onClick={handleAddProduct}>
-                    Add Product
+                  
+                  {/* Image Upload */}
+                  <div>
+                    <Label>Product Image</Label>
+                    <div className="mt-2">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className="hidden"
+                      />
+                      {imagePreview ? (
+                        <div className="relative">
+                          <img
+                            src={imagePreview}
+                            alt="Product preview"
+                            className="w-full h-40 object-cover rounded-lg border border-border"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2 h-8 w-8"
+                            onClick={() => {
+                              setImageFile(null);
+                              setImagePreview(null);
+                              if (fileInputRef.current) fileInputRef.current.value = "";
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="w-full h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-2 hover:border-primary/50 hover:bg-muted/50 transition-colors"
+                        >
+                          <Upload className="h-8 w-8 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">Click to upload image</span>
+                          <span className="text-xs text-muted-foreground">Max 5MB, JPG/PNG</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <Button className="w-full" onClick={handleAddProduct} disabled={isUploadingImage}>
+                    {isUploadingImage ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      "Add Product"
+                    )}
                   </Button>
                 </div>
               </DialogContent>
@@ -401,9 +533,17 @@ const FarmerDashboard = () => {
                         animate={{ opacity: 1 }}
                         className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors group"
                       >
-                        <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center text-3xl">
-                          🌾
-                        </div>
+                        {product.image_url ? (
+                          <img 
+                            src={product.image_url} 
+                            alt={product.name}
+                            className="h-16 w-16 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center">
+                            <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold truncate">{product.name}</h3>
@@ -554,8 +694,62 @@ const FarmerDashboard = () => {
                   />
                   <Label>Organic Certified</Label>
                 </div>
-                <Button className="w-full" onClick={handleUpdateProduct}>
-                  Save Changes
+                
+                {/* Image Upload for Edit */}
+                <div>
+                  <Label>Product Image</Label>
+                  <div className="mt-2">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                    />
+                    {imagePreview ? (
+                      <div className="relative">
+                        <img
+                          src={imagePreview}
+                          alt="Product preview"
+                          className="w-full h-40 object-cover rounded-lg border border-border"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 h-8 w-8"
+                          onClick={() => {
+                            setImageFile(null);
+                            setImagePreview(null);
+                            if (fileInputRef.current) fileInputRef.current.value = "";
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-2 hover:border-primary/50 hover:bg-muted/50 transition-colors"
+                      >
+                        <Upload className="h-8 w-8 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">Click to upload image</span>
+                        <span className="text-xs text-muted-foreground">Max 5MB, JPG/PNG</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+                
+                <Button className="w-full" onClick={handleUpdateProduct} disabled={isUploadingImage}>
+                  {isUploadingImage ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </Button>
               </div>
             </DialogContent>
