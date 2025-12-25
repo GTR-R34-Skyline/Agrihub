@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Leaf, ShoppingCart, User, Bell, LogOut, Loader2 } from "lucide-react";
+import { Menu, X, Leaf, ShoppingCart, User, LogOut, Loader2, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS, APP_NAME } from "@/lib/constants";
@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { LanguageToggle } from "@/components/ui/language-toggle";
+import { NotificationsDropdown } from "@/components/layout/NotificationsDropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -142,9 +143,9 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop Actions */}
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageToggle />
+          <NotificationsDropdown />
           
           <Link to="/cart">
             <Button variant="ghost" size="icon" className="relative">
